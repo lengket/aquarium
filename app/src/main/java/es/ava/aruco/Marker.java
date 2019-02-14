@@ -143,8 +143,11 @@ public class Marker extends MatOfPoint2f implements Comparable<Marker>{
 		pts = imagePoints.toList();
 		// draw
 	    for (int i=0;i<4;i++){
+			Imgproc.line(frame,pts.get(i),pts.get((i+1)%4), color, 2);
 			Imgproc.line(frame,pts.get(i+4),pts.get(4+(i+1)%4), color, 2);
-	
+			Imgproc.line(frame,pts.get(i),pts.get(i+4), color, 2);
+		}
+	}
 	protected void setMat(Mat in){
 		in.copyTo(mat);
 	}
