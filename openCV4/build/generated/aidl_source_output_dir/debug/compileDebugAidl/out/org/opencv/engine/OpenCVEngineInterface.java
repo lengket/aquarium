@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: D:\\Kuliah\\BaseProjectOpenCV4\\openCV4\\java\\src\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
+ * Original file: D:\\kuliah\\proif\\aquarium\\openCV4\\java\\src\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**
