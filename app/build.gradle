@@ -22,7 +22,7 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:23.4.0'
+    implementation 'com.android.support:appcompat-v7:28.+'
     implementation project(':openCV4')
     implementation 'org.rajawali3d:rajawali:1.1.970'
 }
