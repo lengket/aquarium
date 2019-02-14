@@ -5,8 +5,8 @@ apply plugin: 'com.android.application'
         compileSdkVersion 28
 
         defaultConfig {
-            applicationId "com.josiahsmith.tutorial1"
-            minSdkVersion 18
+            applicationId "es.ava.aruco"
+            minSdkVersion 21
             targetSdkVersion 28
             versionCode 1
             versionName "1.0"
