@@ -54,8 +54,7 @@ public class MarkerTracker extends Activity implements CvCameraViewListener2 {
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
                     mOpenCvCameraView.enableView();
-                } break;
-                default:
+                } break;default:
                 {
                     super.onManagerConnected(status);
                 } break;
