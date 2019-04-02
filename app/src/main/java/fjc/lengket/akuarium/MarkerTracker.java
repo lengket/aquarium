@@ -19,8 +19,13 @@ import es.ava.aruco.CameraParameters;
 import es.ava.aruco.MarkerDetector;
 import es.ava.aruco.Marker;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -92,16 +97,31 @@ public class MarkerTracker extends Activity implements CvCameraViewListener2 {
             mOpenCvCameraView.disableView();
     }
 
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onResume()
     {
         super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+        if (hasPermissions(this.getApplicationContext(), Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (!OpenCVLoader.initDebug()) {
+                Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+            } else {
+                Log.d(TAG, "OpenCV library found inside package. Using it!");
+                mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            }
         } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            // TODO: Switch ke sebelah
         }
     }
 
