@@ -32,7 +32,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name=".PermissionPrompter"></activity>
+        <activity android:name=".PermissionPrompter" android:screenOrientation="landscape"></activity>
         <activity
             android:name=".MarkerTracker"
             android:configChanges="keyboardHidden|orientation"

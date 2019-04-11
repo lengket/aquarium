@@ -22,6 +22,7 @@ import es.ava.aruco.Marker;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Vector;
@@ -46,6 +48,8 @@ public class MarkerTracker extends Activity implements CvCameraViewListener2 {
     //You must run a calibration prior to detection
     // The activity to run calibration is provided in the repository
     private static final String DATA_FILEPATH = "";
+
+    static final int RQ_PERMISSION = 14;
 
     private CameraBridgeViewBase mOpenCvCameraView;
     private boolean              mIsJavaCamera = true;
@@ -108,20 +112,37 @@ public class MarkerTracker extends Activity implements CvCameraViewListener2 {
         return true;
     }
 
+    protected void triggerStartEngine() {
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
     @Override
     public void onResume()
     {
         super.onResume();
         if (hasPermissions(this.getApplicationContext(), Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            if (!OpenCVLoader.initDebug()) {
-                Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
-            } else {
-                Log.d(TAG, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-            }
+            this.triggerStartEngine();
         } else {
-            // TODO: Switch ke sebelah
+            Intent intGantiActivity = new Intent(this, PermissionPrompter.class);
+            startActivityForResult(intGantiActivity, RQ_PERMISSION);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RQ_PERMISSION) {
+            if(resultCode == Activity.RESULT_OK) {
+                this.triggerStartEngine();
+            } else {
+                Toast.makeText(this.getApplicationContext(), "Aplikasi ini membutuhkan akses yang diperlukan untuk dapat berjalan.\nAplikasi ditutup karena izin yang diperlukan tidak terpenuhi.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
